@@ -2,7 +2,8 @@
 
 Guide for the **Debian** version of the project.
 
-### Installing `sudo`
+
+## Installing `sudo`
 
 Switch to root.
 ```bash
@@ -29,7 +30,8 @@ Verify if `sudo` was successfully installed.
 dpkg -l | grep sudo
 ```
 
-### Add User to `sudo` Group
+
+## Add User to `sudo` Group
 
 Add user to **sudo** group.
 ```bash
@@ -68,3 +70,40 @@ sudo -v
 ```
 ~$ [sudo] password for <username>: <password>
 ```
+
+
+## Running root-Privileged Commands
+
+Run root commands with `sudo`.
+```bash
+sudo apt update
+```
+
+
+## Configuring `sudo`
+
+Configure **sudo**. <filename> can not end in `~` or contain `.`.
+Create files log all sudo commands.
+```bash
+sudo mkdir /var/log/sudo
+sudo vi /etc/sudoers.d/sudoconfig
+```
+
+1.	To limit authentication using sudo to 3 attempts
+2.	To add a custom error message in the event of an incorrect password
+3.	To log all sudo commands
+4.	To archive all sudo inputs & outputs
+5.	"	"	"
+6.	To require TTY
+7.	To set sudo paths
+
+```
+Defaults      passwd_tries=3
+Defaults      badpass_message="Not the correct Password!"
+Defaults      logfile="/var/log/sudo/<filename>"
+Defaults      log_input,log_output
+Defaults      iolog_dir="/var/log/sudo"
+Defaults      requiretty
+Defaults      secure_path=""/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin""
+```
+
