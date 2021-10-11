@@ -100,10 +100,10 @@ sudo vi /etc/sudoers.d/sudoconfig
 ```
 Defaults      passwd_tries=3
 Defaults      badpass_message="Not the correct Password!"
-Defaults      logfile="/var/log/sudo/<filename>"
+Defaults      logfile="/var/log/sudo/logs"
 Defaults      log_input,log_output
 Defaults      iolog_dir="/var/log/sudo"
 Defaults      requiretty
-Defaults      secure_path=""/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin""
+Defaults      secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 ```
 
