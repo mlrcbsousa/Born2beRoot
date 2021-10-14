@@ -8,7 +8,7 @@ Install `vim`.
 apt-get install vim
 ```
 
-## 3.1 - Installing sudo & adding it in groups
+## 1 - Installing sudo & adding it in groups
 
 ```bash
 su - # ?
@@ -26,7 +26,7 @@ Verify if user was successfully added to **sudo** group.
 getent group sudo
 ```
 
-## 3.2 - Installing SSH
+## 2 - Installing SSH
 
 ```bash
 sudo apt install openssh-server
@@ -56,7 +56,7 @@ ssh msousa@0.0.0.0 -p 4242 # or
 ssh msousa@localhost -p 4242
 ```
 
-## 3.3 - Installing UFW
+## 3 - Installing UFW
 
 ```bash
 sudo apt install ufw
@@ -65,7 +65,7 @@ sudo ufw allow 4242
 sudo ufw status
 ```
 
-## 3.4 - Configuring sudo
+## 4 - Configuring sudo
 
 ```bash
 sudo touch /etc/sudoers.d/sudoconfig
@@ -84,7 +84,7 @@ Defaults    requiretty
 Defaults    secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 ```
 
-## 3.5 - Setting up a strong password policy
+## 5 - Setting up a strong password policy
 
 ```bash
 sudo vi /etc/login.defs
