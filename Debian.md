@@ -2,45 +2,23 @@
 
 Guide for the **Debian** version of the project.
 
-
-## Installing `sudo`
-
-Switch to root.
-```bash
-su -
-```
-
-Update Packages.
-```bash
-apt-get update
-```
-
 Install `vim`.
+
 ```bash
 apt-get install vim
 ```
 
-Install `sudo`.
+## 3.1 - Installing sudo & adding it in groups
+
 ```bash
+su - # ?
 apt install sudo
-```
-
-Verify if `sudo` was successfully installed.
-```bash
-dpkg -l | grep sudo
-```
-
-
-## Add User to `sudo` Group
-
-Add user to **sudo** group.
-```bash
-adduser <username> sudo
-```
-
-Alternatively, add using `usermod`.
-```bash
-usermod -aG sudo <username>
+sudo adduser msousa sudo
+sudo reboot
+sudo -v # ?
+sudo addgroup user42
+sudo adduser msousa user42
+sudo apt update
 ```
 
 Verify if user was successfully added to **sudo** group.
@@ -48,62 +26,96 @@ Verify if user was successfully added to **sudo** group.
 getent group sudo
 ```
 
-Reboot for changes to take effect.
-```bash
-reboot
-```
-
-Log in and verify sudopowers.
-```
-<--->
-Debian GNU/Linux 10 <hostname> tty1
-
-~$ <hostname> login: <username>
-~$ Password: <password>
-<--->
-```
+## 3.2 - Installing SSH
 
 ```bash
-sudo -v
+sudo apt install openssh-server
+sudo vi /etc/ssh/sshd_config
 ```
 
-```
-~$ [sudo] password for <username>: <password>
-```
+`#Port 22` to `Port 4242` and
+`#PermitRootLogin prohibit-password` to `PermitRootLogin no` 
 
+Diference between `sshd_config` and `ssh_config`?
 
-## Running root-Privileged Commands
-
-Run root commands with `sudo`.
 ```bash
-sudo apt update
+sudo vi /etc/ssh/ssh_config
+```
+`#Port 22` to `Port 4242`
+
+```bash
+sudo reboot # for changes to take effect
+sudo service ssh status
+```
+Apply port forwarding rule on VirtualBox can be `4242:4242`.
+
+`ssh` into VM
+```bash
+ssh msousa@127.0.0.1 -p 4242 # or
+ssh msousa@0.0.0.0 -p 4242 # or
+ssh msousa@localhost -p 4242
 ```
 
+## 3.3 - Installing UFW
 
-## Configuring `sudo`
-
-Configure **sudo**. <filename> can not end in `~` or contain `.`.
-Create files log all sudo commands.
 ```bash
+sudo apt install ufw
+sudo ufw enable
+sudo ufw allow 4242
+sudo ufw status
+```
+
+## 3.4 - Configuring sudo
+
+```bash
+sudo touch /etc/sudoers.d/sudoconfig
 sudo mkdir /var/log/sudo
 sudo vi /etc/sudoers.d/sudoconfig
 ```
 
-1.	To limit authentication using sudo to 3 attempts
-2.	To add a custom error message in the event of an incorrect password
-3.	To log all sudo commands
-4.	To archive all sudo inputs & outputs
-5.	"	"	"
-6.	To require TTY
-7.	To set sudo paths
+`# /etc/sudoers.d/sudoconfig`
 
 ```
-Defaults      passwd_tries=3
-Defaults      badpass_message="Not the correct Password!"
-Defaults      logfile="/var/log/sudo/logs"
-Defaults      log_input,log_output
-Defaults      iolog_dir="/var/log/sudo"
-Defaults      requiretty
-Defaults      secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+Defaults    passwd_tries=3
+Defaults    badpass_message="Incorrect sudo password, you have a total of 3 tries."
+Defaults    log_input,log_output 
+Defaults    iolog_dir="/var/log/sudo"
+Defaults    requiretty
+Defaults    secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 ```
+
+## 3.5 - Setting up a strong password policy
+
+```bash
+sudo vi /etc/login.defs
+```
+
+```
+PASS_MAX_DAYS    99999 -> PASS_MAX_DAYS    30
+PASS_MIN_DAYS    0     -> PASS_MIN_DAYS    2
+```
+
+`PASS_WARN_AGE` is 7 by defaults.
+
+```bash
+sudo apt install libpam-pwquality
+sudo vi /etc/pam.d/common-password
+```
+
+Add to the end of the `password requisite pam_pwqiality.so retry=3` line:
+
+```
+minlen=10 ucredit=-1 dcredit=-1 maxrepeat=3 reject_username difok=7 enforce_for_root
+```
+
+Change previous passwords.
+
+```bash
+passwd
+sudo passwd
+```
+
+
+
+
 
