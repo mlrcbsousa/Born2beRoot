@@ -9,6 +9,7 @@ apt-get install vim
 ```
 
 Verify any package installation with `dpkg`
+
 ```bash
 dpkg -l | grep $PACKAGE_NAME
 ```
@@ -27,6 +28,7 @@ sudo apt update
 ```
 
 Verify if user was successfully added to **sudo** group.
+
 ```bash
 getent group sudo
 ```
@@ -46,15 +48,18 @@ Diference between `sshd_config` and `ssh_config`?
 ```bash
 sudo vi /etc/ssh/ssh_config
 ```
+
 `#Port 22` to `Port 4242`
 
 ```bash
 sudo reboot # for changes to take effect
 sudo service ssh status
 ```
+
 Apply port forwarding rule on VirtualBox can be `4242:4242`.
 
 `ssh` into VM
+
 ```bash
 ssh msousa@127.0.0.1 -p 4242 # or
 ssh msousa@0.0.0.0 -p 4242 # or
@@ -68,6 +73,18 @@ sudo apt install ufw
 sudo ufw enable
 sudo ufw allow 4242
 sudo ufw status
+```
+
+List rules numbered
+
+```bash
+sudo ufw status numbered
+```
+
+Delete rule
+
+```bash
+sudo ufw delete $NUMBER
 ```
 
 ## 4 - Configuring sudo
@@ -150,7 +167,8 @@ Check scheduled jobs
 sudo crontab -u root -l
 ```
 
-# dont, needed to run package manager
+> dont, needed to run package manager
+
 ### Disable `dhcpclient` open port 68
 
 ```bash
