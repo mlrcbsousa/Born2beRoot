@@ -165,7 +165,11 @@ sudo crontab -u root -e
 
 After line23 `# m h dom mon dow command`
 
-Put line24 `*/10 * * * * /home/monitoring.sh`
+Put line24
+
+```
+*/10 * * * * /home/monitoring.sh
+```
 
 Check scheduled jobs
 
