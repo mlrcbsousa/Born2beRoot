@@ -22,7 +22,7 @@ lvm_partitions=$(lsblk | grep -c "lvm")
 
 lvm_is_used=$(if [ $lvm_partitions -eq 0 ]; then echo no; else echo yes; fi)
 
-# [$ sudo apt install net-tools]
+# [$ sudo apt-get install net-tools]
 tcp_connections=$(cat /proc/net/sockstat{,6} | awk '$1 == "TCP:" {print $3}')
 
 users_logged_in=$(w -h | wc -l)

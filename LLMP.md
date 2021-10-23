@@ -1,10 +1,9 @@
-
 # Linux Lighttpd MariaDB PHP (LLMP) Stack
 
 ## Step 1: Installing Lighttpd
 
 ```bash
-sudo apt install lighttpd
+sudo apt-get install lighttpd
 ```
 
 Allow incoming connections using Port 80
@@ -13,12 +12,10 @@ Allow incoming connections using Port 80
 sudo ufw allow 80
 ```
 
-
 ## Step 2: Installing & Configuring MariaDB
 
-
 ```bash
-sudo apt install mariadb-server
+sudo apt-get install mariadb-server
 ```
 
 Start interactive script to remove insecure default settings
@@ -54,6 +51,7 @@ GRANT ALL ON paxfamilia.* TO '<username-2>'@'localhost' IDENTIFIED BY '<password
 ```
 
 Flush the privileges
+
 ```
 FLUSH PRIVILEGES;
 ```
@@ -82,13 +80,12 @@ SHOW DATABASES;
 +--------------------+
 ```
 
-
 ## Step 3: Installing PHP
 
 Install php-cgi & php-mysql.
 
 ```bash
-sudo apt install php-cgi php-mysql
+sudo apt-get install php-cgi php-mysql
 ```
 
 ## Step 4: Downloading & Configuring WordPress
@@ -96,7 +93,7 @@ sudo apt install php-cgi php-mysql
 Install _wget_.
 
 ```bash
-sudo apt install wget
+sudo apt-get install wget
 ```
 
 Download WordPress to `/var/www/html`.
