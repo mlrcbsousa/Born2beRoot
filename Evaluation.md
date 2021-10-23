@@ -24,6 +24,6 @@ It's easier to install and configure than CentOS (and I haven't used CentOS befo
 
 ## Check
 
-- [ ] Script running every 10min
+- [x] Script running every 10min
 - [ ] No graphical user interface
 - [ ]
