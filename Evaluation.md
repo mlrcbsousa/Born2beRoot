@@ -16,12 +16,30 @@ It's easier to install and configure than CentOS (and I haven't used CentOS befo
 
 ## The basic differences between CentOS and Debian
 
+CentOS vs Debian are two flavors of Linux operating systems. CentOS, as said above, is a Linux distribution. It is free and open-source. It is enterprise-class – industries can use meaning for server building; it is supported by a large community and is functionally supported by its upstream source, Red Hat Enterprise Linux. Debian is a Unix like computer operating system that is made up of open source components. It is built and supported by a group of individuals who are under the Debian project.
+
+Debian uses Linux as its Kernel. Fedora, CentOS, Oracle Linux are all different distribution from Red Hat Linux and are variant of RedHat Linux. Ubuntu, Kali, etc., are variant of Debian. CentOS vs Debian both are used as internet servers or web servers like web, email, FTP, etc.
+
 ## The purpose of virtual machines
+
+VMs may be deployed to accommodate different levels of processing power needs, to run software that requires a different operating system, or to test applications in a safe, sandboxed environment.
 
 ## The difference between `aptitude` and `apt`
 
+Aptitude is a higher-level package manager while APT is lower-level package manager which can be used by other 
+higher-level package managers.
+
+Aptitude is vaster in functionality than **apt-get** and integrates functionalities of **apt-get** and its other variants including **apt-mark** and **apt-cache**.
+
+[Read more](https://www.tecmint.com/difference-between-apt-and-aptitude/)
+
 ## What is APPArmor
 
+AppArmor ("Application Armor") is a Linux kernel security module that allows the system administrator to restrict programs' capabilities with per-program profiles.
+
+Profiles can allow capabilities like network access, raw socket access, and the permission to read, write, or execute files on matching paths.
+
+[Read more](https://en.wikipedia.org/wiki/AppArmor)
 ## Check
 
 - [x] Script running every 10min
