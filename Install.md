@@ -75,14 +75,16 @@ For bonus part:
     Create volume group \
     **LVMGroup** \
     `/dev/mapper/sda5_crypt`
-11. Create logical volume - **LVMGroup** - `root` - 2G
-12. Create logical volume - **LVMGroup** - `swap` - 1G
-13. Create logical volume - **LVMGroup** - `home` - 1G
-14. Create logical volume - **LVMGroup** - `var` - 1G
-15. Create logical volume - **LVMGroup** - `srv` - 1G
-16. Create logical volume - **LVMGroup** - `tmp` - 1G
-17. Create logical volume - **LVMGroup** - `var-log` - Remaining
-18. | Click | Use as: | Mount point: | Done setting up the partition | 
+11. | Create logical volume | [ **LVMGroup** ] | name | size |
+    | --- | --- | --- | --- |
+    | --- | --- | `root` | 2G |
+    | --- | --- | `swap` | 1G |
+    | --- | --- | `home` | 1G |
+    | --- | --- | `var` | 1G |
+    | --- | --- | `srv` | 1G |
+    | --- | --- | `tmp` | 1G |
+    | --- | --- | `var-log` | Remaining |
+12. | Select | Use as: | Mount point: | Done setting up the partition | 
     | --- | --- | --- | --- |
     | `home #1 ...` | **EXT4 journaling file system** | `/home` | --- |
     | `root #1 ...` | **EXT4 journaling file system** | `/` | --- |
@@ -92,7 +94,7 @@ For bonus part:
     | `var #1 ...` | **EXT4 journaling file system** | `/var` | --- |
     | `var-log #1 ...` | **EXT4 journaling file system** | Enter manually `/var/log` | --- |
 
-25. Finish partitioning and write changes to disk? **Yes**
+13. Finish partitioning and write changes to disk? **Yes**
 
 ### Final Steps
 
