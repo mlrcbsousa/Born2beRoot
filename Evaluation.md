@@ -66,13 +66,35 @@ sudo service ssh status
 cat /etc/os-release | grep PRETTY_NAME
 ```
 
-## Check that the student username login is member of `sudo` and `user42` groups
+## Check that `msousa` is member of `sudo` and `user42` groups
+
+```bash
+groups msousa
+```
 
 ## Check password policy rules
 
+Password expiry: line 160 and 161.
+
+```bash
+vi /etc/login.defs
+```
+
+Password policy: line 25.
+
+```bash
+vi /etc/pam.d/common-password
+```
+
 ### Create a new user
 
+```bash
+sudo adduser new_user
+```
+
 ### Assign password
+
+Confirm it follows the password policy
 
 ### Explain how password rules were setup
 
