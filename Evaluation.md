@@ -98,15 +98,47 @@ Confirm it follows the password policy
 
 ### Explain how password rules were setup
 
+```bash
+vi /etc/pam.d/common-password
+```
+
 ## Create group `evaluating` and add created user
+
+```bash
+sudo addgroup evaluating
+sudo adduser new_user evaluating
+```
 
 ### Check that user belongs to new group
 
+```bash
+groups new_user
+```
+
 ## Explain advantages of password policy and advantages and disadvantages of policy implementation
+
+In theory, the main benefit of password complexity rules is that they enforce the use of unique passwords that are harder to crack. The more requirements you enforce, the higher the number of possible combinations of letters, numbers, and characters.
+
+Password complexity rules try to enforce this “difficult to crack” requirement, but they aren’t always successful. This is partly to do with the diminishing returns involved in increasing complexity
+
+How much better is a 15 character password than a 30 character password if hackers know that longer password is frequently used? And is it better if the user can’t remember the password? Password complexity only scales up to a certain point. Beyond a certain point, a complex password can be difficult to crack if the number of possible combinations is extremely high, but it can also be too complex to be useful to users.
 
 ## Check that the hostname of the machine is `msousa42`
 
+```bash
+uname -n
+# or 
+hostname
+```
+
 ## Modify hostname with evaluator login and reboot to confirm change
+
+```bash
+sudo adduser new_user sudo
+sudo login new_user
+sudo vi /etc/hostname # change to new_user42
+sudo reboot
+```
 
 ### Restore original hostname
 
