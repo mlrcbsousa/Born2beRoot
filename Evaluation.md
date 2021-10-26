@@ -35,6 +35,12 @@ Aptitude is vaster in functionality than **apt-get** and integrates functionalit
 
 ## What is APPArmor
 
+Check APPArmor status
+
+```bash
+sudo aa-status
+```
+
 AppArmor ("Application Armor") is a Linux kernel security module that allows the system administrator to restrict programs' capabilities with per-program profiles.
 
 Profiles can allow capabilities like network access, raw socket access, and the permission to read, write, or execute files on matching paths.
@@ -142,39 +148,141 @@ sudo reboot
 
 ### Restore original hostname
 
+```bash
+sudo vi /etc/hostname # change to msousa42
+sudo reboot
+```
+
 ## How to view partitions
+
+```bash
+lsblk
+```
 
 ### Compare partition output with example in subject
 
+```bash
+NAME                    MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINT
+sda                       8:0    0    8G  0 disk  
+|-sda1                    8:1    0  476M  0 part  /boot
+|-sda2                    8:2    0    1K  0 part  
+`-sda5                    8:5    0  7.5G  0 part  
+  `-sda5_crypt          254:0    0  7.5G  0 crypt 
+    |-LVMGroup-root     254:1    0  1.9G  0 lvm   /
+    |-LVMGroup-swap     254:2    0  952M  0 lvm   [SWAP]
+    |-LVMGroup-home     254:3    0  952M  0 lvm   /home
+    |-LVMGroup-var      254:4    0  952M  0 lvm   /var
+    |-LVMGroup-srv      254:5    0  952M  0 lvm   /srv
+    |-LVMGroup-tmp      254:6    0  952M  0 lvm   /tmp
+    `-LVMGroup-var--log 254:7    0    1G  0 lvm   /var/log
+sr0                      11:0    1 1024M  0 rom
+```
+
 ## Brief explanation of how LVM works
+
+It works by chunking the physical volumes (PVs) into physical extents (PEs). The PEs are mapped onto logical extents (LEs) which are then pooled into volume groups (VGs). These groups are linked together into logical volumes (LVs) that act as virtual disk partitions and that can be managed as such by using LVM.
+
+[Read more](https://searchdatacenter.techtarget.com/definition/logical-volume-management-LVM)
 
 ## What is LVM about
 
+Logical volume management (LVM) is a form of storage virtualization that offers system administrators a more flexible approach to managing disk storage space than traditional partitioning. The goal of LVM is to facilitate managing the sometimes conflicting storage needs of multiple end users.
+
 ## Check `sudo` program is properly installed
+
+```bash
+dpkg -l | grep sudo
+```
 
 ## Assign new user to `sudo` group
 
+```bash
+sudo adduser new_user sudo
+```
+
 ## Explain value and operation of sudo using examples
+
+Sudo stands for SuperUser DO and is used to access restricted files and operations. By default, Linux restricts access to certain parts of the system preventing sensitive files from being compromised.
+
+The sudo command temporarily elevates privileges allowing users to complete sensitive tasks without logging in as the root user.
+
+```bash
+apt-get update # Error 13: Permission denied
+sudo apt-get update
+```
+
+[Read more](https://phoenixnap.com/kb/linux-sudo-command)
 
 ## Show the implementation of the subject rules
 
+```bash
+vi /etc/sudoers.d/sudoconfig
+```
+
+[What is TTY](https://www.howtogeek.com/428174/what-is-a-tty-on-linux-and-how-to-use-the-tty-command/)
+
 ## Verify that the `/var/log/sudo/` folder exists and has a file
+
+```bash
+sudo ls /var/log/sudo/
+```
+
+Has file `seq`.
 
 ### Check contents of files in this folder
 
+```bash
+sudo ls /var/log/sudo/00/00
+# run sudo command
+sudo ls /var/log/sudo/00/00/<newfolder> 
+```
+
 ### Check there is a history of commands using sudo
+
+```bash
+sudo cat /.../log # Input log
+sudo cat /.../ttyout # Output log
+```
 
 ### Run a command using sudo and check if files updated
 
+```bash
+sudo apt update
+sudo ls /var/log/sudo/00/00 # should have new folder
+```
+
 ## Check that UFW is properly installed
+
+```bash
+dpkg -l | grep ufw
+```
 
 ### Check that it is working properly
 
+```bash
+sudo ufw status
+```
+
 ### Explain what UFW is and the value of using it
+
+Uncomplicated Firewall is a program for managing a netfilter firewall designed to be easy to use. It uses a command-line interface consisting of a small number of simple commands, and uses iptables for configuration.
+
+UFW aims to provide an easy to use interface for people unfamiliar with firewall concepts, while at the same time simplifies complicated iptables commands to help an administrator who knows what he or she is doing.
+
+[Read more](https://wiki.ubuntu.com/UncomplicatedFirewall)
 
 ### List active rules should include one for port 4242
 
+```bash
+sudo ufw status | grep 4242
+```
+
 ### Add a new rule for port 8080
+
+```bash
+sudo ufw allow 8080
+sudo ufw status
+```
 
 ### Delete the new rule
 
