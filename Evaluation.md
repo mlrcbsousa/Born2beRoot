@@ -286,29 +286,211 @@ sudo ufw status
 
 ### Delete the new rule
 
+List rules numbered
+
+```bash
+sudo ufw status numbered
+```
+
+Delete rule
+
+```bash
+sudo ufw delete $NUMBER
+```
+
 ## Check that the SSH service is properly installed
+
+```bash
+dpkg -l | grep openssh-server
+```
 
 ### Check that it is working properly
 
+```bash
+sudo service ssh status
+```
+
 ### Explain what SSH is and the value of using it
+
+Secure Shell (SSH) is a cryptographic network protocol for operating network services securely over an unsecured network. Typical applications include remote command-line, login, and remote command execution, but any network service can be secured with SSH.
+
+SSH provides password or public-key based authentication and encrypts connections between two network endpoints. It is a secure alternative to legacy login protocols (such as telnet, rlogin) and insecure file transfer methods (such as FTP).
+
+[Read more](https://en.wikipedia.org/wiki/Secure_Shell)
 
 ### Verify that the SSH service only uses port 4242
 
+```bash
+sudo service ssh status | grep listening
+# or check configs
+sudo vi /etc/ssh/sshd_config
+sudo vi /etc/ssh/ssh_config 
+```
+
 ### Login with SSH from host machine
+
+```bash
+ssh msousa@127.0.0.1 -p 4242 # or
+ssh msousa@0.0.0.0 -p 4242 # or
+ssh msousa@localhost -p 4242
+```
 
 ### Make sure you cannot SSH login with root user
 
+```bash
+msousa@msousa42:~$ login root
+login: Cannot possibly work without effective root
+```
+
 ## Explanation of the monitoring script by showing the code
+
+### architecture
+
+```bash
+architecture=$(uname -a)
+```
+
+uname (short for unix name) is a computer program in Unix and Unix-like computer operating systems that prints the name, version and other details about the current machine and the operating system running on it.
+
+### physical_cpu
+
+```bash
+physical_cpu=$(grep "physical id" /proc/cpuinfo | sort | uniq | wc -l)
+```
+
+### virtual_cpu
+
+```bash
+virtual_cpu=$(grep -c ^processor /proc/cpuinfo)
+```
+
+### memory_usage
+
+```bash
+memory_usage=$(free -m | awk 'NR==2{printf "%s/%sMB (%.2f%%)\n", $3,$2,$3*100/$2 }')
+```
+
+### total_disk
+
+```bash
+total_disk=$(df -Bg | grep '^/dev/' | grep -v '/boot$' | awk '{ft += $2} END {print ft}')
+```
+
+### used_disk
+
+```bash
+used_disk=$(df -Bm | grep '^/dev/' | grep -v '/boot$' | awk '{ut += $3} END {print ut}')
+```
+
+### percent_used_disk
+
+```bash
+percent_used_disk=$(df -Bm | grep '^/dev/' | grep -v '/boot$' | awk '{ut += $3} {ft+= $2} END {printf("%d"), ut/ft*100}')
+```
+
+### cpu_load
+
+```bash
+cpu_load=$(top -bn1 | grep load | awk '{printf "%.2f%%\n", $(NF-2)}')
+```
+
+### last_boot
+
+```bash
+last_boot=$(who -b | awk '$1 == "system" {print $3 " " $4}')
+```
+
+### lvm_partitions
+
+```bash
+lvm_partitions=$(lsblk | grep -c "lvm")
+```
+
+### lvm_is_used
+
+```bash
+lvm_is_used=$(if [ $lvm_partitions -eq 0 ]; then echo no; else echo yes; fi)
+```
+
+### tcp_connections
+
+```bash
+# [$ sudo apt-get install net-tools]
+tcp_connections=$(cat /proc/net/sockstat{,6} | awk '$1 == "TCP:" {print $3}')
+```
+
+### users_logged_in
+
+```bash
+users_logged_in=$(w -h | wc -l)
+```
+
+### ipv4_address
+
+```bash
+ipv4_address=$(hostname -I)
+```
+
+### mac_address
+
+```bash
+mac_address=$(ip link show | awk '$1 == "link/ether" {print $2}')
+```
+
+### sudo_commands_count
+
+```bash
+sudo_commands_count=$(journalctl _COMM=sudo | grep -c COMMAND)
+```
 
 ## What is `cron`
 
+The cron command-line utility, also known as cron job is a job scheduler on Unix-like operating systems. Users who set up and maintain software environments use cron to schedule jobs (commands or shell scripts) to run periodically at fixed times, dates, or intervals. It typically automates system maintenance or administration—though its general-purpose nature makes it useful for things like downloading files from the Internet and downloading email at regular intervals.
+
+[Read more](https://en.wikipedia.org/wiki/Cron)
+
 ### How to set up the script to run every 10mins
+
+```bash
+sudo crontab -e
+```
+
+Add following line
+
+```
+*/10 * * * * /home/monitoring.sh
+```
 
 ### Verify correct functioning of the script
 
+Check print out in console.
+
 ### Change run of script to every minute
 
+```bash
+sudo crontab -e
+```
+
+Add following line
+
+```
+*/1 * * * * /home/monitoring.sh
+```
+
 ### Make the script stop running after reboot without modifying it
+
+Remove the scheduling line on the crontab
+
+```bash
+sudo crontab -e
+```
+
+Remove following line/s
+
+```
+@reboot /home/monitoring.sh
+*/1 * * * * /home/monitoring.sh
+```
 
 - [x] Restart server
 - [x] Check script still exists in the same place
