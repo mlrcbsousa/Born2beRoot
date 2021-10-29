@@ -354,17 +354,35 @@ uname (short for unix name) is a computer program in Unix and Unix-like computer
 
 ### physical_cpu
 
+[Read more](https://www.cyberciti.biz/faq/check-how-many-cpus-are-there-in-linux-system/)
+
 ```bash
 physical_cpu=$(grep "physical id" /proc/cpuinfo | sort | uniq | wc -l)
+# or
+lscpu | grep "CPU(s)"
 ```
 
+Use `/proc/cpuinfo` file that lists CPUs.
+
 ### virtual_cpu
+
+[Read more](https://webhostinggeeks.com/howto/how-to-display-the-number-of-processors-vcpu-on-linux-vps/)
+
+If your processors are multi-core, you need to know how many virtual processors you have. You can count those by looking for lines that start with "processor".
+
+[Read more](https://www.networkworld.com/article/2715970/counting-processors-on-your-linux-box.html)
 
 ```bash
 virtual_cpu=$(grep -c ^processor /proc/cpuinfo)
 ```
 
+`-c` flag is a count on the `grep`
+
 ### memory_usage
+
+[`awk` built-in variables](https://www.thegeekstuff.com/2010/01/8-powerful-awk-built-in-variables-fs-ofs-rs-ors-nr-nf-filename-fnr/)
+
+[Read more](https://linuxcommando.blogspot.com/2008/04/using-awk-to-extract-lines-in-text-file.html)
 
 ```bash
 memory_usage=$(free -m | awk 'NR==2{printf "%s/%sMB (%.2f%%)\n", $3,$2,$3*100/$2 }')
@@ -376,11 +394,23 @@ memory_usage=$(free -m | awk 'NR==2{printf "%s/%sMB (%.2f%%)\n", $3,$2,$3*100/$2
 total_disk=$(df -Bg | grep '^/dev/' | grep -v '/boot$' | awk '{ft += $2} END {print ft}')
 ```
 
+`df` disk utility, `-Bg` displays in Gigabytes.
+
+`ft` is a variable name, `END` stops the command from reaching the print until it has gone through all the lines.
+
+Add-up total.
+
+`-v` flag on `grep` returns non-matching lines.
+
 ### used_disk
 
 ```bash
 used_disk=$(df -Bm | grep '^/dev/' | grep -v '/boot$' | awk '{ut += $3} END {print ut}')
 ```
+
+`-Bm` displays in Megabytes.
+
+Add-up used.
 
 ### percent_used_disk
 
@@ -388,11 +418,19 @@ used_disk=$(df -Bm | grep '^/dev/' | grep -v '/boot$' | awk '{ut += $3} END {pri
 percent_used_disk=$(df -Bm | grep '^/dev/' | grep -v '/boot$' | awk '{ut += $3} {ft+= $2} END {printf("%d"), ut/ft*100}')
 ```
 
+Need to do the same as before but both in the same measuring unit to get a meaningful percentage.
+
 ### cpu_load
 
 ```bash
 cpu_load=$(top -bn1 | grep load | awk '{printf "%.2f%%\n", $(NF-2)}')
 ```
+
+[`top` utility](https://man7.org/linux/man-pages/man1/top.1.html)
+
+`-b` flag for batch mode, allows to pipe output to file or another command.
+`-n1` flag for 1 interation.
+`NF` number of fields in the record (row), `$(NF-2)` selects the thrid counting from the last.
 
 ### last_boot
 
@@ -400,17 +438,23 @@ cpu_load=$(top -bn1 | grep load | awk '{printf "%.2f%%\n", $(NF-2)}')
 last_boot=$(who -b | awk '$1 == "system" {print $3 " " $4}')
 ```
 
+`who -b` shows time of last system boot.
+
 ### lvm_partitions
 
 ```bash
 lvm_partitions=$(lsblk | grep -c "lvm")
 ```
 
+Count `lvm` type partitions from `lsblk` command output.
+
 ### lvm_is_used
 
 ```bash
 lvm_is_used=$(if [ $lvm_partitions -eq 0 ]; then echo no; else echo yes; fi)
 ```
+
+Conditional to check if previous variable is zero or not.
 
 ### tcp_connections
 
@@ -419,11 +463,22 @@ lvm_is_used=$(if [ $lvm_partitions -eq 0 ]; then echo no; else echo yes; fi)
 tcp_connections=$(cat /proc/net/sockstat{,6} | awk '$1 == "TCP:" {print $3}')
 ```
 
+[Read more](https://unix.stackexchange.com/questions/67150/getting-current-tcp-connection-count-on-a-system)
+
+`/proc/net/sockstat{,6}` fies include connections established count.
+
+Find line where first is `TCP:` and print third value which is the `inuse` (in use) amount.
+
 ### users_logged_in
 
 ```bash
 users_logged_in=$(w -h | wc -l)
 ```
+
+`w` - Show who is logged on and what they are doing.
+`-h` flag is without header.
+Each line has info about a logged in user.
+Count of lines is how many users logged in.
 
 ### ipv4_address
 
@@ -431,17 +486,25 @@ users_logged_in=$(w -h | wc -l)
 ipv4_address=$(hostname -I)
 ```
 
+`-I` flag to display IP address.
+
 ### mac_address
 
 ```bash
 mac_address=$(ip link show | awk '$1 == "link/ether" {print $2}')
 ```
 
+`ip` util with `link` object, then select line where `link/ether` is and print second column: MAC address.
+
 ### sudo_commands_count
 
 ```bash
 sudo_commands_count=$(journalctl _COMM=sudo | grep -c COMMAND)
 ```
+
+[Read more](https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs)
+
+If a file path refers to an executable script, a "_COMM=" match for the script name is added to the query.
 
 ## What is `cron`
 
